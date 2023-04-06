@@ -40,6 +40,7 @@ const raz = function(){
 const viderFeuilleDeMatch = () => {
     const players = document.getElementById("feuilleDeMatch").getElementsByTagName("li");
 
+    // On vide la liste des joueurs
     const numberPlayer = players.length
     for (let i = 0; i < numberPlayer; i++) {
         players[0].remove();
@@ -102,12 +103,20 @@ const changeFormation = function(){
 const verifFormation = (formation) => {
     const caractèresSplit = formation.split('');
 
-    if(caractèresSplit.every(elt => (elt < 10 && elt > 0)) && caractèresSplit.length === 3 && parseInt(caractèresSplit[0]) + parseInt(caractèresSplit[1]) + parseInt(caractèresSplit[2]) === 10){
+    if(
+        // Regarde si tous les éléments sont des chiffres
+        caractèresSplit.every(elt => (elt < 10 && elt > 0)) 
+        // Si il y en a bien que 3
+        && caractèresSplit.length === 3 
+        // Si la somme des 3 est égale à 10
+        && parseInt(caractèresSplit[0]) + parseInt(caractèresSplit[1]) + parseInt(caractèresSplit[2]) === 10){
         return true;
     } else {
+        // Ajoute l'animation "nope" 
         const buttonOk = document.getElementById("ok");
         buttonOk.style.animation = "nope 0.2s infinite";
 
+        // Supprime l'animation après un certain temps
         setTimeout(() => {
             buttonOk.style.animation = "none";
         }, 300);
@@ -209,6 +218,7 @@ const selectionneJoueur = function(){
 const trouveEmplacement = (ligne) => {
     const postes = ligne.getElementsByTagName("div");
 
+    // Renvoi le premier élément où sont id est égale à une chaine vide, si il n'y en a pas renvoie null
     return Object.values(postes).find(poste => (poste.id === "")) || null
 }
 
@@ -239,6 +249,7 @@ const placeJoueur = () => {
         ajouteJoueurListe(nom, joueurChoisi.id);
 
         // TODO modifier l'image de l'emplacement Libre
+        // Recupere les informations du joueur que l'on cherche
         const player = playersData.find(player => player.id === parseInt(joueurChoisi.id.substring(2)));
         emplacementLibre.style.backgroundImage = `url(${player.src})`;
         emplacementLibre.title = player.nom;
@@ -293,7 +304,9 @@ const deselectionneCompo = function(){
  * @param {Boolean} plus - true si le joueur est ajouté, false s'il est retiré
  */
 const miseAJourNeffectifs = function(poste, plus){
+    // Recupere l'élément qui a comme className la valeur de poste
     const numberPoste = Object.values(document.getElementsByTagName("td")).filter(ligne => ligne.className === poste)[0];
+    // Ajoute ou enlève 1 à l'effectif en fonction de "plus" 
     numberPoste.textContent = plus ? 
         parseInt(numberPoste.textContent) + 1 
         : parseInt(numberPoste.textContent) - 1; 
@@ -307,6 +320,7 @@ const miseAJourNeffectifs = function(poste, plus){
  */
 const verifCompoComplete = () => {
     const idsLigne = ["ligneGardien", "ligneDefenseur", "ligneMilieu", "ligneAttaquant"];
+    // Regarde si l'une des lignes n'est pas vide
     return idsLigne.some(ligne => trouveEmplacement(document.getElementById(ligne)) !== null)
 }
 
